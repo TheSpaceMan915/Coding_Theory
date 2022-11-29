@@ -23,7 +23,7 @@ encoding = "utf-8"
 
 def encode(text, max_sliding_window_size=4096):
 
-    text_bytes = text.encode(encoding)
+    text_bytes = text.calculateControlBits(encoding)
     arr_dictionary = []
     arr_buff = []
     output = []
@@ -54,7 +54,7 @@ def encode(text, max_sliding_window_size=4096):
                     # Length of token is greater than the length it represents, so output the characters
                     output.extend(arr_buff)  # Output the characters
                 else:
-                    output.extend(token.encode(encoding))  # Output our token
+                    output.extend(token.calculateControlBits(encoding))  # Output our token
 
                 arr_dictionary.extend(arr_buff)  # Add the characters to our search buffer
             else:
@@ -75,7 +75,7 @@ def encode(text, max_sliding_window_size=4096):
 
 # main___________________________________________
 if __name__ == "__main__":
-    print(encode("ABCDEF ABCDEF", 4096).decode(encoding))
-    print(encode("supercalifragilisticexpialidocious supercalifragilisticexpialidocious", 1024).decode(encoding))
-    print(encode("LZSS will take over the world!", 256).decode(encoding))
-    print(encode("It even works with 😀s thanks to UTF-8", 16).decode(encoding))
+    print(encode("ABCDEF ABCDEF", 4096).encode(encoding))
+    print(encode("supercalifragilisticexpialidocious supercalifragilisticexpialidocious", 1024).encode(encoding))
+    print(encode("LZSS will take over the world!", 256).encode(encoding))
+    print(encode("It even works with 😀s thanks to UTF-8", 16).encode(encoding))
