@@ -108,9 +108,20 @@ def findError(data):
     str_error_bit = ''
     for i in list_control_bit_values:
         str_error_bit += str(i)
-    error = int(str_error_bit, 2)
 
+
+    error = int(str_error_bit, 2)
     print('The position of the error bit: ', error)
+
+
+    # fixing the error
+    if (sequence_copy[error - 1] == 0):
+        sequence_copy[error - 1] = 1
+    else:
+        sequence_copy[error - 1] = 0
+
+    print("The error has been fixed")
+    print("The fixed sequence: ", sequence_copy)
     print("The decoding has ended")
 
 
