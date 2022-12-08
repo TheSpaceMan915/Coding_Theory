@@ -149,7 +149,7 @@ def decryptMes(path_container):
 
 
 # main___________________________________________
-img_message = '../files/message.bmp'
+img_message = '../files/pic.bmp'
 mes = imgToMes(img_message)
 print(f'The length of the message: {len(mes)}')
 
