@@ -46,8 +46,9 @@ def codeget(chanses: list, codeList: list, L, R):
             codeList[L][1] = codeList[L][1] + '0'
 
 
-def decodeLZSS(dlen, compstr):
-
+def decodeLZSS(dlen, file_path):
+    with open(file_path, 'r') as f:
+        compstr = json.load(f)
     dic = list("$" * dlen)
     outdec = ""
 
@@ -66,10 +67,7 @@ def decodeLZSS(dlen, compstr):
     return outdec
 
 
-def decodeFano(file_path):
-    with open(file_path, 'r') as f:
-        dtext = json.load(f)
-
+def decodeFano(dtext):
     for i in range(len(dtext)):
         if dtext[i] == '@':
             chance = i
@@ -78,7 +76,6 @@ def decodeFano(file_path):
     let_code = []
     let_chance_list = []
     reader = chance + 1
-
     while reader < len(dtext):
         temp_toAp = []
         temp_toAp.append(dtext[reader])
@@ -131,11 +128,11 @@ if __name__ == "__main__":
     # with open("../files/text_decoded.txt","wb") as f:
     #     f.write(b)
 
+
     # testing
     dictSize = 400
     file_name = "../files/message_encoded.json"
-    dec = decodeFano(file_name)
-    decodeLZSS(dictSize, dec)
+    dec = decodeFano(decodeLZSS(dictSize, file_name))
 
     b = decode_76(dec.encode("UTF-8"))
     with open("../files/text_decoded.txt","wb") as f:

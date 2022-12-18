@@ -2,7 +2,7 @@ import base64
 import json
 
 
-def LZSS(dlen, blen, inp):
+def encodeLZSS(dlen, blen, inp):
     check = 0
     dic = list("$" * dlen)
     buff = list(inp[:blen])
@@ -43,7 +43,11 @@ def LZSS(dlen, blen, inp):
                 if len(inp) > 0:
                     buff.append(inp[0])
                     inp.pop(0)
-    return out
+
+    mess = ""
+    for tuple in out:
+        mess += str(tuple[1])
+    return mess
 
 
 # recursively encoding the characters using Shannon-Fano method
@@ -80,7 +84,7 @@ def codeget(chanses: list, codeList: list, L, R):
             codeList[L][1] = codeList[L][1] + '0'
 
 
-def Fano(file):
+def encodeFano(file):
 
     # counting how many times each character appears
     letCounter = {}
@@ -112,13 +116,19 @@ def Fano(file):
     # sorting the list of probabilities
     letChanceList.sort()
     letChanceList.reverse()
-    letCodes = []
+
+
+    for tuple in letChanceList:
+        print(tuple)
 
 
     # adding the characters to a new list
+    letCodes = []
     for i in range(len(letChanceList)):
         letCodes.append([letChanceList[i][1], ''])
 
+
+    # generating codes
     codeget(letChanceList, letCodes, 0, len(letCodes))
 
     # stopped here
@@ -138,7 +148,8 @@ def Fano(file):
         firstCodedText = firstCodedText + i[1] + tmp
     return firstCodedText
 
-# reading the file as bits
+
+# converting the string into bits
 def b_encode(file):
     with open(file, 'rb') as f:
         binar = base64.b64encode(f.read())
@@ -160,7 +171,15 @@ if __name__ == "__main__":
     text_bits = b_encode("../files/MyMy.txt")
     text_utf = text_bits.decode("UTF-8")
 
+
+    # with open("../files/message_encoded.json", 'w') as f:
+    #     compStr = LZSS(dictSize, bufferSize, Fano(text_utf))
+    #     # compStr = LZSS(dictSize, bufferSize, Fano(b))
+    #     json.dump(compStr, f)
+
+
     with open("../files/message_encoded.json", 'w') as f:
+        compStr = encodeLZSS(dictSize, bufferSize, text_utf)
+        str_fano = encodeFano(text_utf)
         # compStr = LZSS(dictSize, bufferSize, Fano(b))
-        compStr = LZSS(dictSize, bufferSize, Fano(text_utf))
-        json.dump(compStr, f)
+        json.dump(str_fano, f)
